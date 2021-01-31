@@ -151,3 +151,10 @@ def test_custom_python_executable(monkeypatch, tmpdir):
             hooks.get_requires_for_build_wheel()
         runner.assert_called_once()
         assert runner.call_args[0][0][0] == 'some-python'
+
+
+def test_setup_py():
+    hooks = get_hooks('setup-py')
+    with modified_env({'PYTHONPATH': BUILDSYS_PKGS}):
+        res = hooks.get_requires_for_build_wheel({})
+    assert res == ['wheel']  # Shold this be ["setuptools", "wheel"]?
